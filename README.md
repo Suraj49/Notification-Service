@@ -242,7 +242,7 @@ curl -X POST "http://localhost:8080/api/notify?driverId=123&message=New%20Bookin
 
 ## Test_Notification Service-Without FrontEnd
  Use This Website https://www.piesocket.com/websocket-tester
-![Alt text](Screenshot-2024-08-08-221045.png)
+![Alt text](Screenshot%202024-08-08%20221045.png)
 
 
 
