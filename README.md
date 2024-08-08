@@ -41,3 +41,64 @@ public class WebSocketConfig implements WebSocketConfigurer {
         return new DriverNotificationHandler();
     }
 }
+
+## WebSocket Handler
+**`src/main/java/com/example/config/DriverNotificationHandler.java`**
+
+import org.springframework.web.socket.WebSocketSession;
+import org.springframework.web.socket.handler.TextWebSocketHandler;
+import org.springframework.web.socket.TextMessage;
+
+import java.io.IOException;
+import java.util.HashSet;
+import java.util.Set;
+
+public class DriverNotificationHandler extends TextWebSocketHandler {
+
+    private Set<WebSocketSession> sessions = new HashSet<>();
+
+    @Override
+    public void afterConnectionEstablished(WebSocketSession session) throws Exception {
+        sessions.add(session);
+    }
+
+    @Override
+    public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
+        sessions.remove(session);
+    }
+
+    public void sendNotification(String driverId, String message) {
+        for (WebSocketSession session : sessions) {
+            try {
+                if (session.isOpen()) {
+                    session.sendMessage(new TextMessage(driverId + ": " + message));
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+}
+
+## Notification Controller
+**`src/main/java/com/example/config/NotificationController.java`**
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+public class NotificationController {
+
+    @Autowired
+    private DriverNotificationHandler driverNotificationHandler;
+
+    @PostMapping("/api/notify")
+    public String notifyDriver(@RequestParam String driverId, @RequestParam String message) {
+        driverNotificationHandler.sendNotification(driverId, message);
+        return "Notification sent";
+    }
+}
+
+## nextjs frontend
