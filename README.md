@@ -8,6 +8,7 @@ This project demonstrates how to implement real-time notifications in a Next.js 
 1. [Spring Boot Backend](#spring-boot-backend)
 2. [Next.js Frontend](#nextjs-frontend)
 3. [Test the WebSocket Connection](#Test-the-WebSocket-Connection)
+4. [Test_Notification Service-Without FrontEnd](#Test-Notification-Service-Without-FrontEnd)
 
 ## Spring Boot Backend
 
@@ -238,4 +239,9 @@ export default Home;
 ```bash
 curl -X POST "http://localhost:8080/api/notify?driverId=123&message=New%20Booking%20Assigned"
 ```
+
+## Test_Notification Service-Without FrontEnd
+ Use This Website https://www.piesocket.com/websocket-tester
+
+
 
