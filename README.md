@@ -7,9 +7,6 @@ This project demonstrates how to implement real-time notifications in a Next.js 
 
 1. [Spring Boot Backend](#spring-boot-backend)
 2. [Next.js Frontend](#nextjs-frontend)
-3. [Running the Application](#running-the-application)
-4. [Testing](#testing)
-5. [Summary](#summary)
 
 ## Spring Boot Backend
 
@@ -106,3 +103,134 @@ public class NotificationController {
 ```
 
 ## nextjs frontend
+
+## Create a New Next.js Project
+
+```bash
+npx create-next-app@latest next-websocket-app
+cd next-websocket-app
+
+```
+## Create a WebSocket Hook
+**`hooks/useWebSocket.js`**
+
+```js
+import { useEffect, useState } from 'react';
+
+const useWebSocket = (url) => {
+  const [messages, setMessages] = useState([]);
+  const [ws, setWs] = useState(null);
+
+  useEffect(() => {
+    const socket = new WebSocket(url);
+
+    socket.onmessage = (event) => {
+      setMessages((prevMessages) => [...prevMessages, event.data]);
+    };
+
+    socket.onopen = () => {
+      console.log('WebSocket connection opened');
+    };
+
+    socket.onclose = () => {
+      console.log('WebSocket connection closed');
+    };
+
+    socket.onerror = (error) => {
+      console.error('WebSocket error:', error);
+    };
+
+    setWs(socket);
+
+    return () => {
+      socket.close();
+    };
+  }, [url]);
+
+  return messages;
+};
+
+export default useWebSocket;
+```
+## Create a WebSocket Hook
+**`hooks/useWebSocket.js`**
+```js
+import React from 'react';
+import useWebSocket from '../hooks/useWebSocket';
+
+const DriverNotifications = () => {
+  const messages = useWebSocket('ws://localhost:8080/ws/notifications');
+
+  return (
+    <div className="notification-container">
+      <h2>Driver Notifications</h2>
+      <div>
+        {messages.map((message, index) => (
+          <div key={index} className="notification">
+            {message}
+          </div>
+        ))}
+      </div>
+      <style jsx>{`
+        .notification-container {
+          padding: 20px;
+          background-color: #f4f4f4;
+          border-radius: 5px;
+          border: 1px solid #ddd;
+          max-width: 600px;
+          margin: 0 auto;
+        }
+
+        .notification {
+          padding: 10px;
+          margin-bottom: 10px;
+          border: 1px solid #ddd;
+          border-radius: 4px;
+          background-color: #fff;
+          box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+        }
+      `}</style>
+    </div>
+  );
+};
+
+export default DriverNotifications;
+```
+## Create a WebSocket Hook
+**`hooks/useWebSocket.js`**
+```js
+import Head from 'next/head';
+import DriverNotifications from '../components/DriverNotifications';
+
+const Home = () => {
+  return (
+    <div>
+      <Head>
+        <title>Driver Notifications</title>
+        <meta name="description" content="Real-time driver notifications" />
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
+
+      <main>
+        <h1>Welcome to the Driver Notifications App</h1>
+        <DriverNotifications />
+      </main>
+
+      <style jsx>{`
+        main {
+          padding: 20px;
+          text-align: center;
+        }
+
+        h1 {
+          font-size: 2rem;
+        }
+      `}</style>
+    </div>
+  );
+};
+
+export default Home;
+```
+
+
