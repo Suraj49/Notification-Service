@@ -7,6 +7,7 @@ This project demonstrates how to implement real-time notifications in a Next.js 
 
 1. [Spring Boot Backend](#spring-boot-backend)
 2. [Next.js Frontend](#nextjs-frontend)
+3. [Test the WebSocket Connection](#Test-the-WebSocket-Connection)
 
 ## Spring Boot Backend
 
@@ -233,4 +234,8 @@ const Home = () => {
 export default Home;
 ```
 
+## Test the WebSocket Connection
+```bash
+curl -X POST "http://localhost:8080/api/notify?driverId=123&message=New%20Booking%20Assigned"
+```
 
