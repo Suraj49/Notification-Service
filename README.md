@@ -41,10 +41,11 @@ public class WebSocketConfig implements WebSocketConfigurer {
         return new DriverNotificationHandler();
     }
 }
-
+```
 ## WebSocket Handler
 **`src/main/java/com/example/config/DriverNotificationHandler.java`**
 
+```java
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 import org.springframework.web.socket.TextMessage;
@@ -79,10 +80,12 @@ public class DriverNotificationHandler extends TextWebSocketHandler {
         }
     }
 }
+```
 
 ## Notification Controller
 **`src/main/java/com/example/config/NotificationController.java`**
 
+```java
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -100,5 +103,6 @@ public class NotificationController {
         return "Notification sent";
     }
 }
+```
 
 ## nextjs frontend
